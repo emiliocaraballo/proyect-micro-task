@@ -106,6 +106,7 @@ url: https://api.postman.com/collections/5551641-fa8c8d8e-6069-46ac-b96b-6bfe458
 Aqui puedes encontrar todas las colecciones de postman que he creado para este proyecto.
 Donde tiene la información de la API REST.
 
+Nota: estoy exponiendo el access_key=PMAT-01JHMYH33KT1CDNXSK57X3X7G1. Esto es para que puedas probar la API REST. 
 
 Documentación en Swagger 
 $ http://localhost:81/api/service-users/v1/docs#/
