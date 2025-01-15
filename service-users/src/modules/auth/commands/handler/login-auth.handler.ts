@@ -1,6 +1,7 @@
 import { CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as bcrypt from 'bcrypt';
 
 import { UserEntity } from 'src/model/user/user.entity';
 import { customThrowError } from 'service-commons/dist';
@@ -31,20 +32,19 @@ export class LoginAuthHandler implements ICommandHandler<LoginAuthCommand> {
     }
 
     const user = await this.userRepository.findOne({
-      where: { email: body.username, rol: body.rol, password: body.password },
+      where: { email: body.username, rol: body.rol },
       select: ['id', 'password', 'rol', 'tokenVersion'],
     });
-
-    // usuario no encontrado
     if (!user) {
       throw customThrowError({
-        description: 'User not found',
-        code: 'USER_NOT_FOUND',
-        title: 'User not found',
+        description: 'User or password is not valid',
+        code: 'INVALID_CREDENTIALS',
+        title: 'Invalid credentials',
       });
     }
 
-    if (!user) {
+    const isPassword = await bcrypt.compare(body.password, user.password);
+    if (!isPassword) {
       throw customThrowError({
         description: 'User or password is not valid',
         code: 'INVALID_CREDENTIALS',

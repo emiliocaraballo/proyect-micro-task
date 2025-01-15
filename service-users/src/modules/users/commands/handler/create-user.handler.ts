@@ -1,6 +1,7 @@
 import { CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as bcrypt from 'bcrypt';
 
 import { UserEntity } from 'src/model/user/user.entity';
 import { UserCreatedEvent } from 'src/modules/users/events/user-created.event';
@@ -36,7 +37,7 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
       name: body.name,
       lastName: body.lastName,
       email: body.email,
-      password: body.password,
+      password: bcrypt.hashSync(body.password, 10),
       rol: body.rol,
       createdBy: body?.userId,
       updatedBy: body?.userId,
